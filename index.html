@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hidden Flag Map</title>
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        .flag-label {
+            font-size: 24px;
+            font-weight: bold;
+            color: red;
+            background: white;
+            border: 2px solid black;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<script>
+
+let map;
+let infoWindow;
+
+function initMap() {
+
+    const target = {
+        lat: 35.681236,
+        lng: 139.767125
+    };
+
+    map = new google.maps.Map(
+        document.getElementById("map"),
+        {
+            center: target,
+            zoom: 10
+        }
+    );
+
+    const flagText = "FLAG{Mapレイヤー}";
+
+    infoWindow = new google.maps.InfoWindow({
+        content:
+            '<div class="flag-label">' +
+            flagText +
+            '</div>',
+        position: target
+    });
+
+    map.addListener("zoom_changed", updateFlag);
+    map.addListener("dragend", updateFlag);
+
+    updateFlag();
+}
+
+function updateFlag() {
+
+    const zoom = map.getZoom();
+    const center = map.getCenter();
+
+    const inArea =
+        center.lat() > 35.680 &&
+        center.lat() < 35.682 &&
+        center.lng() > 139.766 &&
+        center.lng() < 139.768;
+
+    if (
+        zoom >= 14 &&
+        zoom < 15 &&
+        inArea
+    ) {
+        infoWindow.open({
+            map: map
+        });
+    } else {
+        infoWindow.close();
+    }
+}
+
+</script>
+
+<script
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9CyDR1cjoSSQCb-fz8NvI8LpvkdHCTs0&callback=initMap"
+async
+defer>
+</script>
+
+</body>
+</html>
