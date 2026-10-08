@@ -77,14 +77,12 @@ function updateFlag() {
     center.lng() > 139.752 &&
     center.lng() < 139.778;
 
-    if (
-        zoom >= 14 &&
-        zoom < 15 &&
-        inArea
-    ) {
-        infoWindow.open({
-            map: map
-        });
+    if (zoom === 14) {
+        if (!infoWindow.getMap()) {
+            infoWindow.open({
+                map: map
+            });
+        }
     } else {
         infoWindow.close();
     }
